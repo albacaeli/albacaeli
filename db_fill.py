@@ -23,8 +23,13 @@ with open("data/H400.csv") as csvfile:
 	reader = csv.DictReader(csvfile, delimiter=';')
 	for row in reader:
 		#print row
+		#print row["RA"]
+		#print row["Decl"]
+		
+		
 		db.session.add(models.Object(name=row["Name"], type=row["Type"], ra=np.random.uniform(0.0, 360.0), dec=np.random.uniform(-90.0, 90.0)))
 
+#exit()
 
 # We add the stars
 stars = bsc.readstars("data/IV_27A/catalog.dat", n=None)
