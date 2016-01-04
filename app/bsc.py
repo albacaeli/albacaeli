@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*-
 """
-Quite custom stuff to read the Bright Star Catalog (BSC) files taken from Stellarium...
+Quite custom stuff to read the Bright Star Catalog (BSC) and constellation files taken from Stellarium...
 """
 
 
@@ -103,50 +103,50 @@ def readstars(filepath, n=None):
 	return stars
 
 
-# def findstar(stars, val, name="HIP"):
-# 	vals = [getattr(star, name) for star in stars]
-# 	try:
-# 		index = vals.index(val)
-# 		return stars[index]
-# 	except:
-# 		print "Cannot find HIP %i" % (val)
-# 		return None
-# 	
+def findstar(stars, val, name="HIP"):
+	vals = [getattr(star, name) for star in stars]
+	try:
+		index = vals.index(val)
+		return stars[index]
+	except:
+		print "Cannot find HIP %i" % (val)
+		return None
 	
 	
-# def readconsts(filepath = "data/constellations.txt"):
-# 	"""
-# 	Build a dictionnarry containing the HIP number pairs of lines to draw
-# 	"""
-# 	consts = {}
-# 	constfile = open(filepath, "r")
-# 	lines = constfile.readlines()
-# 	constfile.close()
-# 	for line in lines:
-# 		if len(line) < 10:
-# 			continue
-# 		elements = line.split()
-# 		name = elements[0]
-# 		n = int(elements[1])
-# 		hipcouples = []
-# 		for i in range(n):
-# 			hipcouples.append((int(elements[2+2*i]), int(elements[3+2*i])))
-# 		consts[name] = hipcouples
-# 	return consts
-# 		
-# 
-# def idconsts(stars, consts):
-# 	"""
-# 	Replaces HIP numbers by Stars
-# 	"""
-# 	out = {}
-# 	for (name, couplelist) in consts.iteritems():
-# 		out[name] = []
-# 		print name
-# 		for couple in couplelist:
-# 			out[name].append((findstar(stars, val=couple[0], name="HIP"), findstar(stars, val=couple[1], name="HIP")))
-# 	return out
-# 			
+	
+def readconsts(filepath):
+	"""
+	Build a dictionnarry containing the HIP number pairs of lines to draw
+	"""
+	consts = {}
+	constfile = open(filepath, "r")
+	lines = constfile.readlines()
+	constfile.close()
+	for line in lines:
+		if len(line) < 10:
+			continue
+		elements = line.split()
+		name = elements[0]
+		n = int(elements[1])
+		hipcouples = []
+		for i in range(n):
+			hipcouples.append((int(elements[2+2*i]), int(elements[3+2*i])))
+		consts[name] = hipcouples
+	return consts
+		
+
+def idconsts(stars, consts):
+	"""
+	Replaces HIP numbers by Stars
+	"""
+	out = {}
+	for (name, couplelist) in consts.iteritems():
+		out[name] = []
+		#print name
+		for couple in couplelist:
+			out[name].append((findstar(stars, val=couple[0], name="HIP"), findstar(stars, val=couple[1], name="HIP")))
+	return out
+			
 		
 	
 
