@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+    
+<h1>Hi, {{ g.user.username }}!</h1>
+
+
+The catalog:
+<table>
+{% for object in objects %}
+<tr><td>{{object.name}}</td><td>{{object.ra}}</td><td>{{object.dec}}</td></tr>
+{% endfor %}
+
+</table>
+
+
+{% endblock %}
