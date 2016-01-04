@@ -1,5 +1,6 @@
-from app import db, models
+from app import db, models, bsc
 import csv
+import numpy as np
 
 # We erase the db:
 users = models.User.query.all()
@@ -18,12 +19,17 @@ db.session.commit()
 db.session.add(models.User(username='user', email='user@gmail.com'))
 db.session.add(models.User(username='test', email='test@test.com'))
 
-with open('data/H400.csv') as csvfile:
+with open("data/H400.csv") as csvfile:
 	reader = csv.DictReader(csvfile, delimiter=';')
 	for row in reader:
 		#print row
-		db.session.add(models.Object(name=row["Name"], type=row["Type"], ra=0.0, dec=0.0))
+		db.session.add(models.Object(name=row["Name"], type=row["Type"], ra=np.random.uniform(0.0, 360.0), dec=np.random.uniform(-90.0, 90.0)))
 
 
+# We add the stars
+stars = bsc.readstars("data/IV_27A/catalog.dat", n=None)
+for s in stars:
+	if s.magV < 8.0:
+		db.session.add(models.Star(s.HD, s.ra, s.dec, s.magV, s.Bay, s.const, s.HIP))
 
 db.session.commit()

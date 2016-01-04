@@ -5,7 +5,7 @@
 <h1>Welcome to <i>Alba Caeli</i>!</h1>
 
 {% if g.user.is_authenticated() %}
-Hi {{ g.user.username }} !
+You are logged in as "{{ g.user.username }}".
 {% endif %}
 
 {% endblock %}

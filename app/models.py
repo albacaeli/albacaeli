@@ -93,5 +93,36 @@ class Catalog(db.Model):
 		return '<Catalog %r>' % self.name
 	
 	
+class Star(db.Model):
+	"""A dedicated database for "foreground" stars to be drawn in charts
 	
+	"""
+	id = db.Column(db.Integer, primary_key=True)
+	
+	HD = db.Column(db.Integer)
+	ra = db.Column(db.Float)
+	dec = db.Column(db.Float)
+	magV = db.Column(db.Float)
+	#Bay = db.Column(db.String(64)) Would need unicode in the SQLalchemy... fix this later.
+	const = db.Column(db.String(64))
+	HIP = db.Column(db.Integer)
+	
+	def __init__(self, HD, ra, dec, magV, Bay, const, HIP):
+		
+		self.HD = HD
+		self.ra = ra
+		self.dec = dec
+		self.magV = magV
+		#self.Bay = Bay
+		self.const = const
+		self.HIP = HIP
+
+	def __repr__(self):
+		return '<Star HD %r>' % (self.HD)
+	
+
+
+
+
+
 	

@@ -6,6 +6,9 @@ from .forms import LoginForm
 from .models import User
 from . import models
 
+import io
+import csv
+
 # before any request, define g.user to make it accessible anywhere
 @app.before_request
 def before_request():
@@ -30,14 +33,46 @@ def demo():
 	objects = models.Object.query.all()
 	return render_template('demo.html', title='Demo', objects=objects)
 
+@app.route('/tsvcatalog/<catname>')
+@login_required
+def tsvcatalog(catname):
+	"""Turns a catalog from the database into a D3.js-friendly tab-separated-values
+	
+	I guess that this can be done better, but it's a start.
+	"""
+	
+	output = io.BytesIO()
+	writer = csv.writer(output, delimiter="\t")
+	
+	if catname == "objects":
+		objects = models.Object.query.all()
+		writer.writerow(("name", "ra", "dec"))
+		for object in objects:
+			writer.writerow((object.name, object.ra, object.dec))
+	
+	elif catname == "stars":
+		stars = models.Star.query.all()
+		writer.writerow(("HD", "ra", "dec", "magV"))
+		for star in stars:
+			writer.writerow((star.HD, star.ra, star.dec, star.magV))	
+	
+	else:
+		flash('Unkown catalog!')
+		return redirect(url_for('index'))
+	
+	return output.getvalue()	
+	#return render_template('catalog.tsv', objects=objects) # No, bad idea. Better use the dedicated csv module here!
+
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 
 	#if hasattr(g, "user"):
 	#	return redirect(url_for('index'))
-	#if g.user is not None and g.user.is_authenticated:
-	#		return redirect(url_for('index'))	
+	if g.user is not None and g.user.is_authenticated():
+		flash("You are already logged in!")
+		return redirect(url_for('index'))	
 	
 	form = LoginForm()
 	if form.validate_on_submit():
