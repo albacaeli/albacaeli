@@ -70,7 +70,7 @@ def login():
 
 	#if hasattr(g, "user"):
 	#	return redirect(url_for('index'))
-	if g.user is not None and g.user.is_authenticated():
+	if g.user is not None and g.user.is_authenticated:
 		flash("You are already logged in!")
 		return redirect(url_for('index'))	
 	
