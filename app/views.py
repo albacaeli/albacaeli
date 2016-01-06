@@ -33,6 +33,14 @@ def demo():
 	objects = models.Object.query.all()
 	return render_template('demo.html', title='Demo', objects=objects)
 
+@app.route('/demo2')
+@login_required
+def demo2():
+
+	objects = models.Object.query.all()
+	return render_template('demo2.html', title='Demo 2', objects=objects)
+
+
 @app.route('/tsvcatalog/<catname>')
 @login_required
 def tsvcatalog(catname):

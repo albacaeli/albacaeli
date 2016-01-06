@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+<script type="text/javascript" src="/static/d3/d3.min.js"></script>
+<script type="text/javascript" src="/static/celestial/d3.geo.projection.min.js"></script>
+<script type="text/javascript" src="/static/celestial/celestial.js"></script>
+
+
+
+<script>
+
+var config = { 
+  width: 0,           // Default width, 0 = full parent element width; 
+                      // height is determined by projection
+  projection: "stereographic",    // Map projection used: see below
+  transform: "equatorial", // Coordinate transformation: equatorial (default),
+                           // ecliptic, galactic, supergalactic
+  center: null,       // Initial center coordinates in equatorial transformation only
+                      // [hours, degrees], null = default center
+  background: "#ffffff", // Background color or gradient  
+  adaptable: true,    // Sizes are increased with higher zoom-levels
+  interactive: true,  // Enable zooming and rotation with mousewheel and dragging
+  container: "map",   // ID of parent element, e.g. div
+  datapath: "/static/celestial/",  // Path/URL to data files, empty = subfolder 'data'
+  stars: {
+    show: true,    // Show stars
+    limit: 6,      // Show only stars brighter than limit magnitude
+    colors: false,  // Show stars in spectral colors, if not use default color
+    color: "#000000", // Default color for stars
+    names: false,   // Show star names (css-class starname)
+    proper: false, // Show proper names (if none shows designation)
+    desig: false,   // Show designation (Bayer, Flamsteed, variable star, Gliese, Draper,
+                   // Hipparcos, whichever applies first in the given order)
+    namelimit: 2.5,  // Show only names/designations for stars brighter than namelimit
+    data: 'stars.6.json' // Data source for stellar data, 
+                         // number indicates limit magnitude
+  },
+  dsos: {
+    show: false,    // Show Deep Space Objects (css-classes per object type)
+    limit: 6,      // Show only DSOs brighter than limit magnitude
+    names: false,   // Show DSO names
+    desig: false,   // Show short DSO names
+    namelimit: 6,  // Show only names for DSOs brighter than namelimit
+    data: 'dsos.bright.json'  // Data source for DSOs, 
+                              // opt. number indicates limit magnitude
+  },
+  constellations: {
+    show: true,    // Show constellations 
+    names: false,   // Show constellation names (css-class: constname)
+    desig: false,   // Show short constellation names (3 letter designations)
+    lines: true,   // Show constellation lines (css-class: constline)
+    bounds: false  // Show constellation boundaries (css-class: boundaryline)
+  },
+  mw: {
+    show: false     // Show Milky Way as filled multi-polygon outlines (css-class: mw)
+  },
+  lines: {
+    graticule: false,   // Show graticule lines (css-class: gridline)
+    equatorial: false, // Show equatorial plane (css-class: equatorial)
+    ecliptic: false,    // Show ecliptic plane (css-class: ecliptic)
+    galactic: false,   // Show galactic plane (css-class: galactic)
+    supergalactic: false  // Show supergalactic plane (css-class: supergalactic)
+  }
+};
+
+// Display map with the configuration above
+Celestial.display(config);
+
+
+
+</script>
+
+
+{% endblock %}
