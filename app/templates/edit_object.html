@@ -1,0 +1,13 @@
+{% from "macros.html" import render_field_bootstrap %}
+
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Edit {{ theobject.name }}</h2>
+<form role="form" action="{{ url_for('edit_object', object_id = theobject.id) }}" method=post class=edit-object>
+  {{ edit_object_form.hidden_tag() }}
+  {{ render_field_bootstrap(edit_object_form.name) }}
+  {{ render_field_bootstrap(edit_object_form.text, rows=40) }}
+  <button type=submit class="bt btn-default">Finish Editing</buton>
+</form>
+{% endblock %}

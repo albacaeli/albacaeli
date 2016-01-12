@@ -5,6 +5,7 @@ from app import app, db, lm
 from .forms import LoginForm
 from .models import User
 from . import models
+from . import forms
 
 import io
 import csv
@@ -21,11 +22,12 @@ def load_user(id):
 	return User.query.get(int(id))
 
 
-@app.route('/')
 @app.route('/index')
 def index():
-	return render_template('index.html', title='Home')
 
+	return redirect(url_for('show_observations'))
+
+	
 @app.route('/demo')
 @login_required
 def demo():
@@ -130,4 +132,107 @@ def user(username):
 		return redirect(url_for('index'))
 	else:
 		return render_template('user.html', user=user)
+
+
+###########
+###	 Views from astronomr, slightly adapted
+
+@app.route('/object/<int:object_id>')
+def show_object(object_id):
+	
+	theobject = models.Object.query.get(object_id)
+	if theobject is None:
+		flash("Could not find that object!")
+		return redirect(url_for('index'))
+
+	observations = theobject.logged_observations.order_by(models.LoggedObservation.id.desc())[:10]
+	
+	return render_template('show_object.html', theobject = theobject,
+						   observations = observations)
+
+###
+
+@app.route('/object/<int:object_id>/edit', methods=['GET','POST'])
+@login_required
+def edit_object(object_id):
+
+
+	theobject = models.Object.query.get(object_id)
+	if theobject is None:
+		flash("Could not find that object!")
+		return redirect(url_for('index'))
+
+	edit_object_form = forms.EditObjectForm(obj = theobject)
+	if edit_object_form.validate_on_submit():
+
+		theobject.name = edit_object_form.name.data
+		theobject.text = edit_object_form.text.data
+
+		db.session.add(theobject)
+		db.session.commit()
+
+		flash('%s successfully updated' % theobject.name)
+		return redirect(url_for('show_object', object_id = object_id))
+
+	
+
+	return render_template('edit_object.html', theobject = theobject,
+						   edit_object_form = edit_object_form)
+
+		
+
+###
+
+def get_newest_obs(nobs):
+
+	observations = models.LoggedObservation.query.order_by(models.LoggedObservation.id.desc())[:nobs]
+
+	return observations
+
+###
+
+
+@app.route('/')
+@app.route('/add', methods=['GET', 'POST'])
+def show_observations():
+
+	new_obs_interface = do_add_observation()
+
+	newest_obs = get_newest_obs(10)
+
+	return render_template('show_entries.html', new_obs_interface = new_obs_interface, observations=newest_obs)
+
+
+
+###
+@login_required
+def do_add_observation():
+		
+
+	new_obs_form = forms.LoggedObservationForm()
+	if new_obs_form.validate_on_submit():
+
+		new_obs = models.LoggedObservation(title = new_obs_form.title.data,
+										  timestamp = new_obs_form.timestamp.data,
+										  description = new_obs_form.description.data)
+		db.session.add(new_obs)
+
+		object_names = new_obs_form.objects.data.split(',')
+		for object_name in object_names:
+			theobject = models.Object.query.filter_by(name = object_name).first()
+			if theobject is None:
+				theobject = models.Object(name=object_name, text='')
+			new_obs.objects.append(theobject)
+			db.session.add(theobject)
+
+		db.session.commit()
+
+		flash('New entry was successfully posted')
+
+		new_obs_form = forms.LoggedObservationForm(formdata = None)
+
+
+	return render_template('add_observation.html', new_obs_form = new_obs_form)
+	
+###
 	

@@ -1,0 +1,13 @@
+{% from "macros.html" import render_field_bootstrap %}
+
+<div class="add_observation">
+<h2>Add Observation</h2>
+<form role="form" action="{{ url_for('show_observations') }}" method=post class=add-observation>
+  {{ new_obs_form.hidden_tag() }}
+  {{ render_field_bootstrap(new_obs_form.title) }}
+  {{ render_field_bootstrap(new_obs_form.timestamp, placeholder="YYYY-MM-DD HH:MM:SS") }}
+  {{ render_field_bootstrap(new_obs_form.objects, placeholder="object1,object2,...") }}  
+  {{ render_field_bootstrap(new_obs_form.description, rows=4) }} 
+  <button type=submit class="bt btn-default">Add Observation</button>
+</form>
+</div>

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+{% from "macros.html" import render_observations %}
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-4">
+      {{ new_obs_interface|safe }}
+    </div>
+    <div class="col-sm-7 col-sm-offset-1">
+      {{ render_observations(observations) }}
+    </div>
+  </div>
+</div>
+
+{% endblock %}

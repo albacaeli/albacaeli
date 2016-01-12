@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+{% from "macros.html" import render_observations, link_to %}
+
+<div class=object>
+<h1>{{ theobject.name }}</h1>
+{% if session.logged_in %}
+{{ link_to('edit', 'edit_object', object_id = theobject.id) }}<br>
+{% endif %}
+
+{{ theobject.text|creole2html|safe }}
+
+</div>
+
+{{ render_observations(observations) }}
+
+{% endblock %}

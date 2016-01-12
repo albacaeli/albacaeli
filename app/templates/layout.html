@@ -1,12 +1,10 @@
-
-
 {% from "macros.html" import link_to %}
 
 <!doctype html>
 <html lang="en">
 
 <head>
-  <title>Alba Caeli</title>
+  <title>Astronomr</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
@@ -18,12 +16,11 @@
   <nav class="navbar navbar-default">
     <div class="container-fluid">
       <div class="navbar-header">
-	{{ link_to('<h1>Alba Caeli</h1>', 'show_observations', class="navbar-brand") }}
-	<a href="/index">Home</a> <a href="/demo">Demo</a> <a href="/demo2">Demo2</a>
+	{{ link_to('<h1>Astronomr</h1>', 'show_observations', class="navbar-brand") }}	
       </div>
     <div>
       <ul class="nav navbar-nav navbar-right">
-	{% if not g.user.is_authenticated %}
+	{% if not session.logged_in %}
 	<li> {{link_to('<span class="glyphicon glyphicon-log-in"></span>log in', 'login') }}</li>
 	{% else %}
 	<li> {{link_to('<span class="glyphicon glyphicon-log-out"></span>log out', 'logout') }}</li>
@@ -41,7 +38,7 @@
   {% endfor %}
 
 <div class="container-fluid">
-{% block content %}{% endblock %}
+{% block body %}{% endblock %}
 </div>
 
 </body>

@@ -38,7 +38,7 @@ with open("data/H400.csv") as csvfile:
 		ras = float(row["RA"][-3:-1])
 		ra = (rah + ram/60.0 + ras/3600.0) * 15.0
 		
-		db.session.add(models.Object(name=row["Name"], type=row["Type"], ra=ra, dec=dec))
+		db.session.add(models.Object(name=row["Name"], type=row["Type"], text="Imported from H400.csv", ra=ra, dec=dec))
 
 # We add the stars
 stars = bsc.readstars("data/IV_27A/catalog.dat", n=None)
